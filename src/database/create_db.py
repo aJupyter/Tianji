@@ -41,22 +41,33 @@ def get_text(dir_path):
         docs.extend(loader.load())
     return docs
 
+def get_one_text(file_path):
+    # args: file_path, 目标文件路径
+    if file_path.split('.')[-1] == 'md':
+        loader = UnstructuredMarkdownLoader(file_path)
+    elif file_path.split('.')[-1] == 'txt':
+        loader = UnstructuredFileLoader(file_path)
+    return loader.load()
+
 
 if __name__ == "__main__":
     
     # 目标文件夹
-    tar_dir = [
-        "../../data/corpus/4祝福"
-    ]
+    # tar_dir = [
+    #     "../data/corpus/1敬酒、饭局礼仪/knowledges.txt"
+    # ]
+
+    tar_file = "../../data/corpus/1敬酒/knowledges.txt"
 
     # 加载目标文件
     docs = []
-    for dir_path in tar_dir:
-        docs.extend(get_text(dir_path))
+    # for dir_path in tar_dir:
+    #     docs.extend(get_text(dir_path))
+    docs.extend(get_one_text(tar_file))
 
     # 对文本进行分块
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500, chunk_overlap=50, separators='\n\n')
+        chunk_size=500, chunk_overlap=50, separators='\n\n###')
     split_docs = text_splitter.split_documents(docs)
 
     # 加载文心 Key
@@ -70,7 +81,7 @@ if __name__ == "__main__":
 
     # 构建向量数据库
     # 定义持久化路径
-    persist_directory = '../../data/vectordb/chroma/4'
+    persist_directory = '../../data/vectordb/chroma/1'
     # 加载数据库
     vectordb = Chroma.from_documents(
         documents=split_docs,

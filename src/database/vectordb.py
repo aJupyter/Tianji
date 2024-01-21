@@ -44,8 +44,8 @@ class VectorDB:
             raise KeyError("No such embedding model.")
         
         # 加载向量数据库
-        # 目前只支持 4 祝福
-        db_key_lst = ["4"]
+        # 目前只支持 4 祝福;1 敬酒
+        db_key_lst = ["4","1"]
         self.dbs = {}
         for one_db_key in db_key_lst:
             vectorstore = Chroma(persist_directory=os.path.join(self.db_path, one_db_key), embedding_function=embeddings)
